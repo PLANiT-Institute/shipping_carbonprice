@@ -19,11 +19,21 @@ fuels = df['Fuel'].unique()
 selected_fuel = st.selectbox("연료(Fuel)를 선택하세요 (가격은 연료-t 가격으로 계산됩니다):", fuels)
 
 fuel_df = df[df['Fuel'] == selected_fuel].sort_values("Year").reset_index(drop=True)
-editable_cols = ["LCV (J/ton)", "Fuel GFI (gCO2/MJ)", "Tier1 GFI (gCO2/MJ)", "Tier2 GFI (gCO2/MJ)"]
+editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
 
 # ---- 입력값 표 transpose ----
 st.markdown('<span style="font-size: 0.85em;">연도별 입력값 </span>', unsafe_allow_html=True)
 input_t_df = round(fuel_df[["Year"] + editable_cols], 3).set_index("Year").T
+
+row_name_map = {
+    "LCV": "저위발열량 (J/ton)",
+    "Fuel GFI": "연료 GFI (gCO₂/MJ)",
+    "Tier1 GFI": "티어1 GFI (gCO₂/MJ)",
+    "Tier2 GFI": "티어2 GFI (gCO₂/MJ)"
+}
+
+input_t_df = input_t_df.rename(index=row_name_map)
+
 edited_t_df = st.data_editor(
     input_t_df,
     num_rows="fixed",
@@ -51,8 +61,8 @@ def calculate_tier2(fuel_gfi, tier2_gfi, lcv):
 
 calc_results = []
 for _, row in edited_df.iterrows():
-    tier1 = calculate_tier1(float(row['Fuel GFI (gCO2/MJ)']), float(row['Tier1 GFI (gCO2/MJ)']), float(row['Tier2 GFI (gCO2/MJ)']), float(row['LCV']))
-    tier2 = calculate_tier2(float(row['Fuel GFI (gCO2/MJ)']), float(row['Tier2 GFI (gCO2/MJ)']), float(row['LCV J/ton']))
+    tier1 = calculate_tier1(float(row['Fuel GFI']), float(row['Tier1 GFI']), float(row['Tier2 GFI']), float(row['LCV']))
+    tier2 = calculate_tier2(float(row['Fuel GFI']), float(row['Tier2 GFI']), float(row['LCV']))
     total = tier1 + tier2
     calc_results.append({
         "Year": int(row['Year']),
@@ -68,6 +78,13 @@ st.markdown('<span style="font-size: 0.85em;">계산 결과 ($/ton-fuel) </span>
 
 output_t_df = calc_df.set_index("Year").T
 st.dataframe(output_t_df, use_container_width=True)
+
+output_row_map = {
+    "RU1 Cost": "Tier1 Cost ($/ton-fuel)",
+    "RU2 Cost": "Tier2 Cost ($/ton-fuel)",
+    "Total Cost": "Total Cost ($/ton-fuel)"
+}
+output_t_df = output_t_df.rename(index=output_row_map)
 
 # ---- 그래프(그대로, 연도별 선 그래프) ----
 import plotly.graph_objects as go
