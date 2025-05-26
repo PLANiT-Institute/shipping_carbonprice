@@ -16,10 +16,10 @@ df = load_data()
 # st.title("해운 연료별 연도별 탄소비용 계산기")
 
 fuels = df['Fuel'].unique()
-selected_fuel = st.selectbox("연료(Fuel)를 선택하세요:", fuels)
+selected_fuel = st.selectbox("연료(Fuel)를 선택하세요 (가격은 연료-t 가격으로 계산됩니다):", fuels)
 
 fuel_df = df[df['Fuel'] == selected_fuel].sort_values("Year").reset_index(drop=True)
-editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
+editable_cols = ["LCV (J/ton)", "Fuel GFI (gCO2/MJ)", "Tier1 GFI (gCO2/MJ)", "Tier2 GFI (gCO2/MJ)"]
 
 # ---- 입력값 표 transpose ----
 st.markdown('<span style="font-size: 0.85em;">연도별 입력값 </span>', unsafe_allow_html=True)
@@ -51,8 +51,8 @@ def calculate_tier2(fuel_gfi, tier2_gfi, lcv):
 
 calc_results = []
 for _, row in edited_df.iterrows():
-    tier1 = calculate_tier1(float(row['Fuel GFI']), float(row['Tier1 GFI']), float(row['Tier2 GFI']), float(row['LCV']))
-    tier2 = calculate_tier2(float(row['Fuel GFI']), float(row['Tier2 GFI']), float(row['LCV']))
+    tier1 = calculate_tier1(float(row['Fuel GFI (gCO2/MJ)']), float(row['Tier1 GFI (gCO2/MJ)']), float(row['Tier2 GFI (gCO2/MJ)']), float(row['LCV']))
+    tier2 = calculate_tier2(float(row['Fuel GFI (gCO2/MJ)']), float(row['Tier2 GFI (gCO2/MJ)']), float(row['LCV J/ton']))
     total = tier1 + tier2
     calc_results.append({
         "Year": int(row['Year']),
