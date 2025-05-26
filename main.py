@@ -56,8 +56,8 @@ for _, row in edited_df.iterrows():
     total = tier1 + tier2
     calc_results.append({
         "Year": int(row['Year']),
-        "Tier1 Cost": round(tier1, 1),
-        "Tier2 Cost": round(tier2, 1),
+        "RU1 Cost": round(tier1, 1),
+        "RU2 Cost": round(tier2, 1),
         "Total Cost": round(total, 1)
     })
 
