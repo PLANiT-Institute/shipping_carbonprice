@@ -64,7 +64,7 @@ for _, row in edited_df.iterrows():
 calc_df = pd.DataFrame(calc_results)
 
 # ---- 출력값 표도 transpose ----
-st.markdown('<span style="font-size: 0.85em;">계산 결과 ($/ton-fuel, 행/열 전치) </span>', unsafe_allow_html=True)
+st.markdown('<span style="font-size: 0.85em;">계산 결과 ($/ton-fuel) </span>', unsafe_allow_html=True)
 
 output_t_df = calc_df.set_index("Year").T
 st.dataframe(output_t_df, use_container_width=True)
