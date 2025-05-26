@@ -13,7 +13,7 @@ def load_data():
 
 df = load_data()
 
-st.title("해운 연료별 연도별 탄소비용 계산기")
+# st.title("해운 연료별 연도별 탄소비용 계산기")
 
 fuels = df['Fuel'].unique()
 selected_fuel = st.selectbox("연료(Fuel)를 선택하세요:", fuels)
