@@ -84,7 +84,7 @@ fig.add_trace(go.Scatter(
 ))
 fig.update_layout(
     xaxis_title="Year",
-    yaxis_title="Cost ($/ton-fuel)",
+    yaxis_title="RU1 & RU2 Cost ($/ton-fuel)",
     legend=dict(x=0, y=1.1, orientation="h")
 )
 st.plotly_chart(fig, use_container_width=True)
