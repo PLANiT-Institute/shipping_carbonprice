@@ -22,7 +22,7 @@ fuel_df = df[df['Fuel'] == selected_fuel].sort_values("Year").reset_index(drop=T
 editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
 
 # ---- 입력값 표 transpose ----
-st.markdown('<span style="font-size: 0.9em;">연도별 입력값 </span>', unsafe_allow_html=True)
+st.markdown('<span style="font-size: 0.85em;">연도별 입력값 </span>', unsafe_allow_html=True)
 input_t_df = round(fuel_df[["Year"] + editable_cols], 3).set_index("Year").T
 edited_t_df = st.data_editor(
     input_t_df,
@@ -64,7 +64,7 @@ for _, row in edited_df.iterrows():
 calc_df = pd.DataFrame(calc_results)
 
 # ---- 출력값 표도 transpose ----
-st.markdown('<span style="font-size: 0.9em;">계산 결과 ($/ton-fuel, 행/열 전치) </span>', unsafe_allow_html=True)
+st.markdown('<span style="font-size: 0.85em;">계산 결과 ($/ton-fuel, 행/열 전치) </span>', unsafe_allow_html=True)
 
 output_t_df = calc_df.set_index("Year").T
 st.dataframe(output_t_df, use_container_width=True)
