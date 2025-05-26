@@ -14,9 +14,10 @@ def load_data():
 df = load_data()
 
 # st.title("해운 연료별 연도별 탄소비용 계산기")
+st.markdown("연료(Fuel)를 선택하세요:")
 
 fuels = df['Fuel'].unique()
-selected_fuel = st.selectbox("연료(Fuel)를 선택하세요:", fuels)
+selected_fuel = st.selectbox("", fuels)
 
 fuel_df = df[df['Fuel'] == selected_fuel].sort_values("Year").reset_index(drop=True)
 editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
