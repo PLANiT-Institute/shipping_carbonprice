@@ -74,10 +74,10 @@ import plotly.graph_objects as go
 
 fig = go.Figure()
 fig.add_trace(go.Scatter(
-    x=calc_df["Year"], y=calc_df["RU1 Cost"], mode="lines+markers", name="Tier1 Cost"
+    x=calc_df["Year"], y=calc_df["Tier1 Cost"], mode="lines+markers", name="RU1 Cost"
 ))
 fig.add_trace(go.Scatter(
-    x=calc_df["Year"], y=calc_df["RU2 Cost"], mode="lines+markers", name="Tier2 Cost"
+    x=calc_df["Year"], y=calc_df["Tier2 Cost"], mode="lines+markers", name="RU2 Cost"
 ))
 fig.add_trace(go.Scatter(
     x=calc_df["Year"], y=calc_df["Total Cost"], mode="lines+markers", name="Total Cost"
