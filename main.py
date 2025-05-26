@@ -14,16 +14,15 @@ def load_data():
 df = load_data()
 
 # st.title("해운 연료별 연도별 탄소비용 계산기")
-st.markdown("연료(Fuel)를 선택하세요:")
 
 fuels = df['Fuel'].unique()
-selected_fuel = st.selectbox("", fuels)
+selected_fuel = st.selectbox("연료(Fuel)를 선택하세요:", fuels)
 
 fuel_df = df[df['Fuel'] == selected_fuel].sort_values("Year").reset_index(drop=True)
 editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
 
 # ---- 입력값 표 transpose ----
-st.markdown("연도별 입력값 (행/열 전치, 직접 수정)")
+st.markdown('<span style="font-size: 0.8em;">연도별 입력값 </span>', unsafe_allow_html=True)
 input_t_df = round(fuel_df[["Year"] + editable_cols], 3).set_index("Year").T
 edited_t_df = st.data_editor(
     input_t_df,
