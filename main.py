@@ -25,27 +25,44 @@ editable_cols = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
 st.markdown('<span style="font-size: 0.85em;">연도별 입력값 </span>', unsafe_allow_html=True)
 input_t_df = round(fuel_df[["Year"] + editable_cols], 3).set_index("Year").T
 
+# 1. mapping 정의
+editable_cols_original = ["LCV", "Fuel GFI", "Tier1 GFI", "Tier2 GFI"]
 row_name_map = {
     "LCV": "저위발열량 (J/ton)",
     "Fuel GFI": "연료 GFI (gCO₂/MJ)",
     "Tier1 GFI": "티어1 GFI (gCO₂/MJ)",
     "Tier2 GFI": "티어2 GFI (gCO₂/MJ)"
 }
+editable_cols = [row_name_map[c] for c in editable_cols_original]
 
+# 2. 행 이름도 바꾸고
 input_t_df = input_t_df.rename(index=row_name_map)
 
+# 3. 데이터 편집 후
 edited_t_df = st.data_editor(
     input_t_df,
     num_rows="fixed",
     use_container_width=True
 )
 
-# transpose된 입력값을 다시 Year별로 복원
 edited_df = edited_t_df.T.reset_index()
 edited_df = edited_df.rename(columns={"index": "Year"})
 edited_df["Year"] = edited_df["Year"].astype(int)
 for col in editable_cols:
     edited_df[col] = pd.to_numeric(edited_df[col], errors="coerce")
+
+# edited_t_df = st.data_editor(
+#     input_t_df,
+#     num_rows="fixed",
+#     use_container_width=True
+# )
+
+# # transpose된 입력값을 다시 Year별로 복원
+# edited_df = edited_t_df.T.reset_index()
+# edited_df = edited_df.rename(columns={"index": "Year"})
+# edited_df["Year"] = edited_df["Year"].astype(int)
+# for col in editable_cols:
+#     edited_df[col] = pd.to_numeric(edited_df[col], errors="coerce")
 
 def calculate_tier1(fuel_gfi, tier1_gfi, tier2_gfi, lcv):
     if fuel_gfi > tier1_gfi:
@@ -78,13 +95,6 @@ st.markdown('<span style="font-size: 0.85em;">계산 결과 ($/ton-fuel) </span>
 
 output_t_df = calc_df.set_index("Year").T
 st.dataframe(output_t_df, use_container_width=True)
-
-output_row_map = {
-    "RU1 Cost": "Tier1 Cost ($/ton-fuel)",
-    "RU2 Cost": "Tier2 Cost ($/ton-fuel)",
-    "Total Cost": "Total Cost ($/ton-fuel)"
-}
-output_t_df = output_t_df.rename(index=output_row_map)
 
 # ---- 그래프(그대로, 연도별 선 그래프) ----
 import plotly.graph_objects as go
